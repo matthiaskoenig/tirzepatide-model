@@ -3,7 +3,7 @@
 # Tirzepatide model
 This repository provides the tirzepatide physiologically based pharmacokinetics (PBPK) model.
 
-The model is distributed as [SBML](http://sbml.org) available from [`tirzepatide_body_flat.xml`](./models/tirzepatide_body_flat.xml).
+The model is distributed as [SBML](http://sbml.org) available from [`tirzepatide_body_flat.xml`](./models/tirzepatide_body_flat.xml) with the COMBINE archive available from [`tirzepatide_model.omex`](./tirzepatide_model.omex).
 
 ![model overview](./figures/tirzepatide_model.png)
 
