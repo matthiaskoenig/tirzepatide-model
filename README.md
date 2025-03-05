@@ -1,4 +1,4 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13758627.svg)](https://doi.org/10.5281/zenodo.13758627)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14976788.svg)](https://doi.org/10.5281/zenodo.14976788)
 
 # Tirzepatide model
 This repository provides the tirzepatide physiologically based pharmacokinetics (PBPK) model.
@@ -15,11 +15,11 @@ The kidney submodel is available from [`tirzepatide_kidney.xml`](./models/tirzep
 The whole-body submodel is available from [`tirzepatide_body.xml`](./models/tirzepatide_body.xml).
 
 ## How to cite
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13758627.svg)](https://doi.org/10.5281/zenodo.13758627)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14976788.svg)](https://doi.org/10.5281/zenodo.14976788)
 
 > Mishra, A., & König, M. (2025).
 > *Physiologically based pharmacokinetic (PBPK) model of tirzepatide.*   
-> Zenodo. [https://doi.org/10.5281/zenodo.13758627](https://doi.org/10.5281/zenodo.13758627)
+> Zenodo. [https://doi.org/10.5281/zenodo.14976788](https://doi.org/10.5281/zenodo.14976788)
 
 ## License
 
