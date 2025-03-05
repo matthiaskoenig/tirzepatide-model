@@ -5,14 +5,22 @@ This repository provides the tirzepatide physiologically based pharmacokinetics 
 
 The model is distributed as [SBML](http://sbml.org) available from [`tirzepatide_body_flat.xml`](./models/tirzepatide_body_flat.xml) with the COMBINE archive available from [`tirzepatide_model.omex`](./tirzepatide_model.omex).
 
+The model is distributed as [SBML](http://sbml.org) available from [`tirzepatide_body_flat.xml`](./models/tirzepatide_body_flat.xml) with 
+corresponding SBML4humans model report at [https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_body_flat.xml](https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_body_flat.xml) and equations from [`tirzepatide_body_flat.md`](./models/tirzepatide_body_flat.md).
+
+The COMBINE archive is available from [`tirzepatide_model.omex`](./tirzepatide_model.omex).
+
 ![model overview](./figures/tirzepatide_model.png)
 
 ### Comp submodels
-The liver submodel is available from [`tirzepatide_liver.xml`](./models/tirzepatide_liver.xml).
+The liver submodel is available from [`tirzepatide_liver.xml`](./models/tirzepatide_liver.xml) with corresponding SBML4humans report at
+[https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_liver.xml](https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_liver.xml) and equations from [`tirzepatide_liver.md`](./models/tirzepatide_liver.md).
 
-The kidney submodel is available from [`tirzepatide_kidney.xml`](./models/tirzepatide_kidney.xml).
+The kidney submodel is available from [`tirzepatide_kidney.xml`](./models/tirzepatide_kidney.xml) with corresponding SBML4humans report at
+[https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_kidney.xml](https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_kidney.xml) and equations from [`tirzepatide_kidney.md`](./models/tirzepatide_kidney.md).
 
-The whole-body submodel is available from [`tirzepatide_body.xml`](./models/tirzepatide_body.xml).
+The whole-body submodel is available from [`tirzepatide_body.xml`](./models/tirzepatide_body.xml) with corresponding SBML4humans report at
+[https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_body.xml](https://sbml4humans.de/model_url?url=https://raw.githubusercontent.com/matthiaskoenig/tirzepatide-model/main/models/tirzepatide_body.xml) and equations from [`tirzepatide_body.md`](./models/tirzepatide_body.md).
 
 ## How to cite
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14976788.svg)](https://doi.org/10.5281/zenodo.14976788)
