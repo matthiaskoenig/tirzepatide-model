@@ -11,7 +11,7 @@ length: [m]
 
 ## Parameters `p`
 ```
-TMEX_k = 1.0  # [1/min] rate urinary excretion of tirzepatide  
+TMEX_k = 0.0191953690449852  # [1/min] rate urinary excretion of tirzepatide  
 Vext = 1.5  # [l] plasma  
 Vki = 0.3  # [l] kidney  
 Vmem = nan  # [m^2] plasma membrane  

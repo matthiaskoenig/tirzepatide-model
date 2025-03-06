@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Furihata2022</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <!--<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+</head>
+
+<body>
+<div id="app">
+    <!-- Vue app-->
+    <v-app>
+        <v-content>
+
+            <a href="../index.html">Experiments</a>
+            <h1>Furihata2022</h1>
+
+            <h2>Models</h2>
+            <p>
+            <ul>
+                <li><strong>model</strong>: <a href="../../../models/results/models/tirzepatide_body_flat.xml">../../../models/results/models/tirzepatide_body_flat.xml</a></li>
+            </ul>
+            </p>
+
+            <h2>Datasets</h2>
+            <p>
+            <ul>
+                <li><strong>tirzepatide_10</strong>: <a href="Furihata2022_tirzepatide_10.tsv">Furihata2022_tirzepatide_10.tsv</a></li>
+                <li><strong>tirzepatide_10_multi</strong>: <a href="Furihata2022_tirzepatide_10_multi.tsv">Furihata2022_tirzepatide_10_multi.tsv</a></li>
+                <li><strong>tirzepatide_15</strong>: <a href="Furihata2022_tirzepatide_15.tsv">Furihata2022_tirzepatide_15.tsv</a></li>
+                <li><strong>tirzepatide_15_multi</strong>: <a href="Furihata2022_tirzepatide_15_multi.tsv">Furihata2022_tirzepatide_15_multi.tsv</a></li>
+                <li><strong>tirzepatide_5</strong>: <a href="Furihata2022_tirzepatide_5.tsv">Furihata2022_tirzepatide_5.tsv</a></li>
+                <li><strong>tirzepatide_5_multi</strong>: <a href="Furihata2022_tirzepatide_5_multi.tsv">Furihata2022_tirzepatide_5_multi.tsv</a></li>
+            </ul>
+            </p>
+
+            <h2>Figures</h2>
+            <p>
+            <ul>
+                <li><strong>Fig1</strong>: <a href="Furihata2022_Fig1.svg">Furihata2022_Fig1.svg</a></li>
+            </ul>
+            </p>
+
+            <h3>Fig1</h3>
+            <p>
+            <table>
+                <tr>
+                    <td>
+                        <!--<v-img src="Furihata2022_Fig1.svg" max-width="600" width="600"></v-img>-->
+                        <img src="Furihata2022_Fig1.svg" width="600">
+                    </td>
+                    <!--
+                    <td>
+                    </td>
+                    -->
+                </tr>
+            </table>
+            </p>
+
+            <h2>Code</h2>
+            <p>
+                <a href="../../../experiments/studies/furihata2022.py">../../../experiments/studies/furihata2022.py</a>
+            <pre>
+<code class="python">from typing import Dict
+
+from sbmlsim.data import DataSet, load_pkdb_dataframe
+from sbmlsim.fit import FitMapping, FitData
+from sbmlutils.console import console
+
+from pkdb_models.models.tirzepatide.experiments.base_experiment import (
+    TirzepatideSimulationExperiment,
+)
+from pkdb_models.models.tirzepatide.experiments.metadata import (
+    Tissue,
+    Route,
+    Dosing,
+    ApplicationForm,
+    Health,
+    Fasting,
+    TirzepatideMappingMetaData,
+    Coadministration,
+)
+
+from sbmlsim.plot import Axis, Figure
+from sbmlsim.simulation import Timecourse, TimecourseSim
+
+from pkdb_models.models.tirzepatide.helpers import run_experiments
+
+
+class Furihata2022(TirzepatideSimulationExperiment):
+    """Simulation experiment of Furihata2022."""
+
+    # Bodyweights for the cohorts (in kg)
+    bodyweights = {
+        "cohort1": 75.4,
+        "cohort2": 74.9,
+        "cohort3": 73.3,
+    }
+    cohorts = list(bodyweights.keys())
+    doses = {
+        5: [5] * 7,
+        10: [2.5] * 2 + [5] * 2 + [10] * 4,
+        15: [5] * 2 + [10] * 2 + [15] * 4,
+    }
+    colors = {
+        5: "crimson",
+        10: "goldenrod",
+        15: "limegreen",
+    }
+
+    def datasets(self) -> Dict[str, DataSet]:
+        dsets = {}
+        for fig_id in ["Fig1"]:
+            df = load_pkdb_dataframe(f"{self.sid}_{fig_id}", data_path=self.data_path)
+            for label, df_label in df.groupby("label"):
+                if label.startswith("tirzepatide_"):
+                    dset = DataSet.from_df(df_label, self.ureg)
+                    dset.unit_conversion("mean", 1 / self.Mr.tir)
+                    dsets[label] = dset
+        return dsets
+
+    def simulations(self) -> Dict[str, TimecourseSim]:
+
+        Q_ = self.Q_
+        tcsims = {}
+        for cohort in self.cohorts:
+            for dose, dose_list in self.doses.items():
+                # single dose
+                single_dose = dose_list[0]
+                tc_single = Timecourse(
+                    start=0,
+                    end=14 * 24 * 60,  # simulate for 1 week [min]
+                    steps=2000,
+                    changes={
+                        **self.default_changes(),
+                        "BW": Q_(self.bodyweights[cohort], "kg"),
+                        "SCDOSE_tir": Q_(single_dose, "mg"),
+                    },
+                )
+                tcsims[f"po_tir_{cohort}_{dose}"] = TimecourseSim(
+                    timecourses=[tc_single],
+                    time_offset=0,
+                )
+
+                timecourses = []
+                timecourses.append(
+                    Timecourse(
+                        start=0,
+                        end=7 * 24 * 60,
+                        steps=2000,
+                        changes={
+                            **self.default_changes(),
+                            "BW": Q_(self.bodyweights[cohort], "kg"),
+                            "SCDOSE_tir": Q_(single_dose, "mg"),
+                        },
+                    )
+                )
+                followup = dose_list[1:]
+                for i, d in enumerate(followup):
+                    if i == len(followup) - 1:
+                        tc = Timecourse(
+                            start=0,
+                            end=840 * 60,  # [min]
+                            steps=2000,
+                            changes={
+                                **self.default_changes(),
+                                "BW": Q_(self.bodyweights[cohort], "kg"),
+                                "SCDOSE_tir": Q_(d, "mg")},
+                        )
+                    else:
+                        tc = Timecourse(
+                            start=0,
+                            end=7 * 24 * 60,  # [min]
+                            steps=2000,
+                            changes={
+                                **self.default_changes(),
+                                "BW": Q_(self.bodyweights[cohort], "kg"),
+                                "SCDOSE_tir": Q_(d, "mg")},
+                        )
+                    timecourses.append(tc)
+
+                tcsims[f"po_tir_multi_{cohort}_{dose}"] = TimecourseSim(
+                    timecourses=timecourses,
+                    time_offset=-7 * 24 * 60 * (len(timecourses) - 1),
+                )
+        return tcsims
+
+    def fit_mappings(self) -> Dict[str, FitMapping]:
+        mappings = {}
+        selected_cohort = "cohort3"
+        for dose, dose_list in self.doses.items():
+            mappings[f"fm_po_tir_{selected_cohort}_{dose}"] = FitMapping(
+                self,
+                reference=FitData(
+                    self,
+                    dataset=f"tirzepatide_{dose}",
+                    xid="time",
+                    yid="mean",
+                    yid_sd="mean_sd",
+                    count="count",
+                ),
+                observable=FitData(
+                    self, task=f"task_po_tir_{selected_cohort}_{dose}", xid="time", yid="[Cve_tir]"
+                ),
+                metadata=TirzepatideMappingMetaData(
+                    tissue=Tissue.PLASMA,
+                    route=Route.PO,
+                    application_form=ApplicationForm.SUBCUTANEOUS,
+                    dosing=Dosing.SINGLE,
+                    health=Health.T2DM,
+                    fasting=Fasting.NR,
+                    coadministration=Coadministration.NONE,
+                ),
+            )
+            mappings[f"fm_po_tir_multi_{selected_cohort}_{dose}"] = FitMapping(
+                self,
+                reference=FitData(
+                    self,
+                    dataset=f"tirzepatide_{dose}_multi",
+                    xid="time",
+                    yid="mean",
+                    yid_sd="mean_sd",
+                    count="count",
+                ),
+                observable=FitData(
+                    self, task=f"task_po_tir_multi_{selected_cohort}_{dose}", xid="time", yid="[Cve_tir]"
+                ),
+                metadata=TirzepatideMappingMetaData(
+                    tissue=Tissue.PLASMA,
+                    route=Route.PO,
+                    application_form=ApplicationForm.SUBCUTANEOUS,
+                    dosing=Dosing.MULTIPLE,
+                    health=Health.T2DM,
+                    fasting=Fasting.NR,
+                    coadministration=Coadministration.NONE,
+                ),
+            )
+        return mappings
+
+    def figures(self) -> Dict[str, Figure]:
+        fig = Figure(
+            experiment=self,
+            sid="Fig1",
+            num_rows=2,
+            name=f"{self.__class__.__name__}",
+        )
+        plots = fig.create_plots(
+            xaxis=Axis(self.label_time, unit=self.unit_time), legend=True
+        )
+
+        plots[0].set_xaxis(Axis(self.label_time, unit="week", min=-0.1, max=2))
+        plots[1].set_xaxis(Axis(self.label_time, unit="week", min=-3, max=6))
+        plots[0].set_yaxis(self.label_tir, unit=self.unit_tir)
+        plots[1].set_yaxis(self.label_tir, unit=self.unit_tir)
+
+        selected_cohort = "cohort3"
+        for dose, dose_list in self.doses.items():
+            single_dose = dose_list[0]
+            plots[0].add_data(
+                task=f"task_po_tir_{selected_cohort}_{dose}",
+                xid="time",
+                yid="[Cve_tir]",
+                label=f"Sim {single_dose} mg tir",
+                color=self.colors[dose],
+            )
+            plots[0].add_data(
+                dataset=f"tirzepatide_{dose}",
+                xid="time",
+                yid="mean",
+                yid_sd="mean_sd",
+                count="count",
+                label=f"Data {single_dose} mg",
+                color=self.colors[dose],
+            )
+            plots[1].add_data(
+                task=f"task_po_tir_multi_{selected_cohort}_{dose}",
+                xid="time",
+                yid="[Cve_tir]",
+                label=f"Sim {single_dose} mg tir",
+                color=self.colors[dose],
+            )
+            plots[1].add_data(
+                dataset=f"tirzepatide_{dose}_multi",
+                xid="time",
+                yid="mean",
+                yid_sd="mean_sd",
+                count="count",
+                label=f"Data {single_dose} mg",
+                color=self.colors[dose],
+            )
+
+        return {fig.sid: fig}
+
+
+if __name__ == "__main__":
+    run_experiments(Furihata2022, output_dir=Furihata2022.__name__)</code>
+        </pre>
+            </p>
+
+        </v-content>
+    </v-app>
+</div>
+
+
+<!-- loading dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.6/dist/vuetify.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        delimiters: ['${', '}'],
+        data() {
+            return {}
+        }
+    })
+</script>
+
+
+</body>
+</html>

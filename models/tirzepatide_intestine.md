@@ -11,7 +11,7 @@ length: [m]
 
 ## Parameters `p`
 ```
-TMEXC_k = 0.1  # [1/min] rate of tirzepatide metabolite fecal excretion  
+TMEXC_k = 0.000392062936151394  # [1/min] rate of tirzepatide metabolite fecal excretion  
 Vapical = nan  # [m^2] apical membrane (intestinal membrane enterocytes)  
 Vbaso = nan  # [m^2] basolateral membrane (intestinal membrane enterocytes)  
 Vchain = 0.1  # [l] volume of chain compartment  

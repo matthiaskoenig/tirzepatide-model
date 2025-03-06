@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Urva2021</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <!--<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+</head>
+
+<body>
+<div id="app">
+    <!-- Vue app-->
+    <v-app>
+        <v-content>
+
+            <a href="../index.html">Experiments</a>
+            <h1>Urva2021</h1>
+
+            <h2>Models</h2>
+            <p>
+            <ul>
+                <li><strong>model</strong>: <a href="../../../models/results/models/tirzepatide_body_flat.xml">../../../models/results/models/tirzepatide_body_flat.xml</a></li>
+            </ul>
+            </p>
+
+            <h2>Datasets</h2>
+            <p>
+            <ul>
+                <li><strong>tirzepatide_end</strong>: <a href="Urva2021_tirzepatide_end.tsv">Urva2021_tirzepatide_end.tsv</a></li>
+                <li><strong>tirzepatide_mild</strong>: <a href="Urva2021_tirzepatide_mild.tsv">Urva2021_tirzepatide_mild.tsv</a></li>
+                <li><strong>tirzepatide_moderate</strong>: <a href="Urva2021_tirzepatide_moderate.tsv">Urva2021_tirzepatide_moderate.tsv</a></li>
+                <li><strong>tirzepatide_normal</strong>: <a href="Urva2021_tirzepatide_normal.tsv">Urva2021_tirzepatide_normal.tsv</a></li>
+                <li><strong>tirzepatide_severe</strong>: <a href="Urva2021_tirzepatide_severe.tsv">Urva2021_tirzepatide_severe.tsv</a></li>
+            </ul>
+            </p>
+
+            <h2>Figures</h2>
+            <p>
+            <ul>
+                <li><strong>Fig2</strong>: <a href="Urva2021_Fig2.svg">Urva2021_Fig2.svg</a></li>
+            </ul>
+            </p>
+
+            <h3>Fig2</h3>
+            <p>
+            <table>
+                <tr>
+                    <td>
+                        <!--<v-img src="Urva2021_Fig2.svg" max-width="600" width="600"></v-img>-->
+                        <img src="Urva2021_Fig2.svg" width="600">
+                    </td>
+                    <!--
+                    <td>
+                    </td>
+                    -->
+                </tr>
+            </table>
+            </p>
+
+            <h2>Code</h2>
+            <p>
+                <a href="../../../experiments/studies/urva2021.py">../../../experiments/studies/urva2021.py</a>
+            <pre>
+<code class="python">from typing import Dict
+
+from sbmlsim.data import DataSet, load_pkdb_dataframe
+from sbmlsim.fit import FitMapping, FitData
+from sbmlsim.plot import Axis, Figure
+from sbmlsim.simulation import Timecourse, TimecourseSim
+
+from sbmlutils.console import console
+
+from pkdb_models.models.tirzepatide.experiments.base_experiment import (
+    TirzepatideSimulationExperiment,
+)
+from pkdb_models.models.tirzepatide.experiments.metadata import Tissue, Route, Dosing, ApplicationForm, Health, \
+    Fasting, TirzepatideMappingMetaData, Coadministration
+
+from pkdb_models.models.tirzepatide.helpers import run_experiments
+
+
+class Urva2021(TirzepatideSimulationExperiment):
+    """Simulation experiment of Urva2021.
+
+    Renal impairment.
+    """
+
+    bodyweight = {  # [kg]
+        "normal"    : 88.0,
+        "mild"      : 93.1,
+        "moderate"  : 83.8,
+        "severe"    : 81.8,
+        # "end"       : 89.6,
+    }
+    kidney_function = {
+        "normal": TirzepatideSimulationExperiment.renal_map["Normal renal function"],
+        "mild": TirzepatideSimulationExperiment.renal_map["Mild renal impairment"],
+        "moderate": TirzepatideSimulationExperiment.renal_map["Moderate renal impairment"],
+        "severe": TirzepatideSimulationExperiment.renal_map["Severe renal impairment"],
+        # "end": TirzepatideSimulationExperiment.renal_map["End stage renal disease"],
+    }
+
+    groups = list(bodyweight.keys())
+
+    def datasets(self) -> Dict[str, DataSet]:
+        dsets = {}
+        for fig_id in ["Fig2"]:
+            df = load_pkdb_dataframe(f"{self.sid}_{fig_id}", data_path=self.data_path)
+            for label, df_label in df.groupby("label"):
+                if label.startswith("tirzepatide_"):
+                    dset = DataSet.from_df(df_label, self.ureg)
+                    dset.unit_conversion("mean", 1 / self.Mr.tir)
+                    dsets[f"{label}"] = dset
+        return dsets
+
+    def simulations(self) -> Dict[str, TimecourseSim]:
+        Q_ = self.Q_
+        tcsims = {}
+
+        for group, value in self.kidney_function.items():
+            tcsims[f"tir_renal_{group}"] = TimecourseSim(
+                Timecourse(
+                    start=0,
+                    end=5 * 7 * 24 * 60,  # 4 weeks
+                    steps=2000,
+                    changes={
+                        **self.default_changes(),
+                        "BW": Q_(self.bodyweight[group], "kg"),
+                        "SCDOSE_tir": Q_(5, "mg"),
+                        "KI__f_renal_function": Q_(value, "dimensionless")
+                    },
+                )
+            )
+        return tcsims
+
+    def fit_mappings(self) -> Dict[str, FitMapping]:
+        mappings = {}
+        for group in self.groups:
+            mappings[f"fm_tir_renal_{group}"] = FitMapping(
+                self,
+                reference=FitData(
+                    self,
+                    dataset=f"tirzepatide_{group}",
+                    xid="time",
+                    yid="mean",
+                    yid_sd="mean_sd",
+                    count="count",
+                ),
+                observable=FitData(
+                    self, task=f"task_tir_renal_{group}", xid="time", yid=f"[Cve_tir]",
+                ),
+                metadata=TirzepatideMappingMetaData(
+                    tissue=Tissue.PLASMA,
+                    route=Route.PO,
+                    application_form=ApplicationForm.SUBCUTANEOUS,
+                    dosing=Dosing.SINGLE,
+                    health=Health.T2DM if group == "normal" else Health.T2DM_RENAL_IMPAIRMENT,
+                    fasting=Fasting.NR,
+                    coadministration=Coadministration.NONE,
+                ),
+            )
+        return mappings
+
+    def figures(self) -> Dict[str, Figure]:
+        fig = Figure(
+            experiment=self,
+            sid=f"Fig2",
+            name=f"{self.__class__.__name__} (renal impairment)",
+        )
+        plots = fig.create_plots(
+            xaxis=Axis(self.label_time, unit="week"),
+            yaxis=Axis(self.label_tir, unit=self.unit_tir),
+            legend=True)
+        # simulations
+        for group, color in zip(self.groups, self.renal_colors.values()):
+            plots[0].add_data(
+                task=f"task_tir_renal_{group}",
+                xid="time",
+                yid="[Cve_tir]",
+                label=group,
+                color=color,
+            )
+        # data
+        for group, color in zip(self.groups, self.renal_colors.values()):
+            plots[0].add_data(
+                dataset=f"tirzepatide_{group}",
+                xid="time",
+                yid="mean",
+                yid_sd="mean_sd",
+                count="count",
+                label=f"{group}",
+                color=color,
+            )
+
+        return {
+            fig.sid: fig
+        }
+
+if __name__ == "__main__":
+    run_experiments(Urva2021, output_dir=Urva2021.__name__)
+</code>
+        </pre>
+            </p>
+
+        </v-content>
+    </v-app>
+</div>
+
+
+<!-- loading dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.6/dist/vuetify.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        delimiters: ['${', '}'],
+        data() {
+            return {}
+        }
+    })
+</script>
+
+
+</body>
+</html>

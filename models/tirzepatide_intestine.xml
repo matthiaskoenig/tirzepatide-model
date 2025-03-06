@@ -460,7 +460,7 @@ FOR A PARTICULAR PURPOSE.</p></body>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="meta_TMEXC_k" sboTerm="SBO:0000009" id="TMEXC_k" name="rate of tirzepatide metabolite fecal excretion" value="0.1" units="per_min" constant="true">
+      <parameter metaid="meta_TMEXC_k" sboTerm="SBO:0000009" id="TMEXC_k" name="rate of tirzepatide metabolite fecal excretion" value="0.000392062936151394" units="per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_TMEXC_k">

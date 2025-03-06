@@ -11,14 +11,13 @@ length: [m]
 
 ## Parameters `p`
 ```
-TMEX_k = 0.0001  # [1/min] rate for tirzepatide import, export, transport in bile  
+TMEX_k = 0.00394930762501805  # [1/min] rate for tirzepatide import, export, transport in bile  
 Vapical = nan  # [m^2] apical membrane  
 Vbi = 1.0  # [l] bile  
 Vext = 1.5  # [l] plasma  
 Vli = 1.5  # [l] liver  
 Vlumen = 1.15425  # [l] intestinal lumen (inner part of intestine)  
 Vmem = nan  # [m^2] plasma membrane  
-vTMIM = nan  # [mmol/min]   
 ```
 
 ## Initial conditions `x0`
@@ -32,9 +31,9 @@ tm_lumen = 0.0  # [mmol/l] tirzepatide metabolites (lumen) in Vlumen
 ## ODE system
 ```
 # y
-TMEHC = vTMIM  # [mmol/min] tirzepatide enterohepatic circulation  
-TMEX = vTMIM  # [mmol/min] tirzepatide bile export  
 TMIM = TMEX_k * Vli * tm_ext  # [mmol/min] tirzepatide import (TMIM)  
+TMEHC = TMIM  # [mmol/min] tirzepatide enterohepatic circulation  
+TMEX = TMIM  # [mmol/min] tirzepatide bile export  
 
 # odes
 d tm/dt = TMIM / Vli - TMEX / Vli  # [mmol/l/min] tirzepatide metabolites (liver)  

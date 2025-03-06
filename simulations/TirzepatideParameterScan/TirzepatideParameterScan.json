@@ -1,0 +1,344 @@
+{
+  "experiment_id": "TirzepatideParameterScan",
+  "base_path": "/home/mkoenig/git/pkdb_models/pkdb_models/models/tirzepatide",
+  "data_path": "[PosixPath('/home/mkoenig/git/pkdb_data/studies/tirzepatide')]",
+  "models": {
+    "model": {
+      "sid": null,
+      "name": null,
+      "language": "SBML",
+      "language_type": "SBML",
+      "source": {
+        "source": "/home/mkoenig/git/pkdb_models/pkdb_models/models/tirzepatide/models/results/models/tirzepatide_body_flat.xml",
+        "path": "/home/mkoenig/git/pkdb_models/pkdb_models/models/tirzepatide/models/results/models/tirzepatide_body_flat.xml",
+        "content": "None"
+      },
+      "changes": {}
+    }
+  },
+  "tasks": {
+    "task_scan_hepatic_scan": {
+      "model": "model",
+      "simulation": "scan_hepatic_scan"
+    },
+    "task_scan_renal_scan": {
+      "model": "model",
+      "simulation": "scan_renal_scan"
+    },
+    "task_scan_bodyweight_scan": {
+      "model": "model",
+      "simulation": "scan_bodyweight_scan"
+    }
+  },
+  "simulations": {
+    "scan_hepatic_scan": {
+      "type": "ScanSim"
+    },
+    "scan_renal_scan": {
+      "type": "ScanSim"
+    },
+    "scan_bodyweight_scan": {
+      "type": "ScanSim"
+    }
+  },
+  "data": {
+    "task_scan_hepatic_scan__time": {
+      "type": "TASK",
+      "index": "time",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__IVDOSE_tir": {
+      "type": "TASK",
+      "index": "IVDOSE_tir",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__SCDOSE_tir": {
+      "type": "TASK",
+      "index": "SCDOSE_tir",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__Cve_tir": {
+      "type": "TASK",
+      "index": "Cve_tir",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__Cve_tm": {
+      "type": "TASK",
+      "index": "Cve_tm",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__Cve_tmtot": {
+      "type": "TASK",
+      "index": "Cve_tmtot",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__Aurine_tm": {
+      "type": "TASK",
+      "index": "Aurine_tm",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__Afeces_tm": {
+      "type": "TASK",
+      "index": "Afeces_tm",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__KI__f_renal_function": {
+      "type": "TASK",
+      "index": "KI__f_renal_function",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__f_cirrhosis": {
+      "type": "TASK",
+      "index": "f_cirrhosis",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_hepatic_scan__BW": {
+      "type": "TASK",
+      "index": "BW",
+      "unit": null,
+      "task": "task_scan_hepatic_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__time": {
+      "type": "TASK",
+      "index": "time",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__IVDOSE_tir": {
+      "type": "TASK",
+      "index": "IVDOSE_tir",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__SCDOSE_tir": {
+      "type": "TASK",
+      "index": "SCDOSE_tir",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__Cve_tir": {
+      "type": "TASK",
+      "index": "Cve_tir",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__Cve_tm": {
+      "type": "TASK",
+      "index": "Cve_tm",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__Cve_tmtot": {
+      "type": "TASK",
+      "index": "Cve_tmtot",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__Aurine_tm": {
+      "type": "TASK",
+      "index": "Aurine_tm",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__Afeces_tm": {
+      "type": "TASK",
+      "index": "Afeces_tm",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__KI__f_renal_function": {
+      "type": "TASK",
+      "index": "KI__f_renal_function",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__f_cirrhosis": {
+      "type": "TASK",
+      "index": "f_cirrhosis",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_renal_scan__BW": {
+      "type": "TASK",
+      "index": "BW",
+      "unit": null,
+      "task": "task_scan_renal_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__time": {
+      "type": "TASK",
+      "index": "time",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__IVDOSE_tir": {
+      "type": "TASK",
+      "index": "IVDOSE_tir",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__SCDOSE_tir": {
+      "type": "TASK",
+      "index": "SCDOSE_tir",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__Cve_tir": {
+      "type": "TASK",
+      "index": "Cve_tir",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__Cve_tm": {
+      "type": "TASK",
+      "index": "Cve_tm",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__Cve_tmtot": {
+      "type": "TASK",
+      "index": "Cve_tmtot",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__Aurine_tm": {
+      "type": "TASK",
+      "index": "Aurine_tm",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__Afeces_tm": {
+      "type": "TASK",
+      "index": "Afeces_tm",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__KI__f_renal_function": {
+      "type": "TASK",
+      "index": "KI__f_renal_function",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__f_cirrhosis": {
+      "type": "TASK",
+      "index": "f_cirrhosis",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    },
+    "task_scan_bodyweight_scan__BW": {
+      "type": "TASK",
+      "index": "BW",
+      "unit": null,
+      "task": "task_scan_bodyweight_scan",
+      "dataset": null,
+      "function": null,
+      "variables": null
+    }
+  },
+  "figures": {}
+}

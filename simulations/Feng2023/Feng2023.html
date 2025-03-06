@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Feng2023</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <!--<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+</head>
+
+<body>
+<div id="app">
+    <!-- Vue app-->
+    <v-app>
+        <v-content>
+
+            <a href="../index.html">Experiments</a>
+            <h1>Feng2023</h1>
+
+            <h2>Models</h2>
+            <p>
+            <ul>
+                <li><strong>model</strong>: <a href="../../../models/results/models/tirzepatide_body_flat.xml">../../../models/results/models/tirzepatide_body_flat.xml</a></li>
+            </ul>
+            </p>
+
+            <h2>Datasets</h2>
+            <p>
+            <ul>
+                <li><strong>tirzepatide_10_cohort1</strong>: <a href="Feng2023_tirzepatide_10_cohort1.tsv">Feng2023_tirzepatide_10_cohort1.tsv</a></li>
+                <li><strong>tirzepatide_15_cohort2</strong>: <a href="Feng2023_tirzepatide_15_cohort2.tsv">Feng2023_tirzepatide_15_cohort2.tsv</a></li>
+                <li><strong>tirzepatide_2_5_cohort1</strong>: <a href="Feng2023_tirzepatide_2_5_cohort1.tsv">Feng2023_tirzepatide_2_5_cohort1.tsv</a></li>
+                <li><strong>tirzepatide_2_5_cohort2</strong>: <a href="Feng2023_tirzepatide_2_5_cohort2.tsv">Feng2023_tirzepatide_2_5_cohort2.tsv</a></li>
+                <li><strong>tirzepatide_5_cohort1</strong>: <a href="Feng2023_tirzepatide_5_cohort1.tsv">Feng2023_tirzepatide_5_cohort1.tsv</a></li>
+                <li><strong>tirzepatide_5_cohort2</strong>: <a href="Feng2023_tirzepatide_5_cohort2.tsv">Feng2023_tirzepatide_5_cohort2.tsv</a></li>
+            </ul>
+            </p>
+
+            <h2>Figures</h2>
+            <p>
+            <ul>
+                <li><strong>Fig1</strong>: <a href="Feng2023_Fig1.svg">Feng2023_Fig1.svg</a></li>
+            </ul>
+            </p>
+
+            <h3>Fig1</h3>
+            <p>
+            <table>
+                <tr>
+                    <td>
+                        <!--<v-img src="Feng2023_Fig1.svg" max-width="600" width="600"></v-img>-->
+                        <img src="Feng2023_Fig1.svg" width="600">
+                    </td>
+                    <!--
+                    <td>
+                    </td>
+                    -->
+                </tr>
+            </table>
+            </p>
+
+            <h2>Code</h2>
+            <p>
+                <a href="../../../experiments/studies/feng2023.py">../../../experiments/studies/feng2023.py</a>
+            <pre>
+<code class="python">from typing import Dict
+
+from sbmlsim.data import DataSet, load_pkdb_dataframe
+from sbmlsim.fit import FitMapping, FitData
+from sbmlutils.console import console
+
+from pkdb_models.models.tirzepatide.experiments.base_experiment import (
+    TirzepatideSimulationExperiment,
+)
+from pkdb_models.models.tirzepatide.experiments.metadata import Tissue, Route, Dosing, ApplicationForm, Health, \
+    Fasting, TirzepatideMappingMetaData, Coadministration
+
+from sbmlsim.plot import Axis, Figure
+from sbmlsim.simulation import Timecourse, TimecourseSim
+
+from pkdb_models.models.tirzepatide.helpers import run_experiments
+
+
+class Feng2023(TirzepatideSimulationExperiment):
+    """Simulation experiment of Feng2023."""
+
+    bodyweights = {
+        "cohort1": 65.0,  # [kg],
+        "cohort2": 67.6,  # [kg],
+    }
+    cohorts = list(bodyweights.keys())
+    doses = {
+        2.5: [2.5],
+        5  : [2.5, 2.5, 2.5, 2.5, 5, 5, 5],
+        10 : [2.5, 2.5, 2.5, 2.5, 5, 5, 5, 5, 7.5, 7.5, 7.5, 7.5, 10, 10, 10],
+        15 : [2.5, 2.5, 2.5, 2.5, 5, 5, 5, 5, 7.5, 7.5, 7.5, 7.5, 10, 10, 10, 10, 12.5, 12.5, 12.5, 12.5, 15, 15, 15],
+    }
+    colors = {
+        2.5: "crimson",
+        5  : "goldenrod",
+        10 : "limegreen",
+        15 : "steelblue",
+    }
+
+    def datasets(self) -> Dict[str, DataSet]:
+        dsets = {}
+        for fig_id in ["Fig1"]:
+            df = load_pkdb_dataframe(f"{self.sid}_{fig_id}", data_path=self.data_path)
+            for label, df_label in df.groupby("label"):
+                if label.startswith("tirzepatide_"):
+                    dset = DataSet.from_df(df_label, self.ureg)
+                    dset.unit_conversion("mean", 1 / self.Mr.tir)
+                    dsets[f"{label}"] = dset
+        return dsets
+
+    def simulations(self) -> Dict[str, TimecourseSim]:
+        Q_ = self.Q_
+        tcsims = {}
+
+        for cohort in self.cohorts:
+            for dose_key, dose_values in self.doses.items():
+                if cohort == "cohort1" and dose_key == 15:
+                    continue
+                if cohort == "cohort2" and dose_key == 10:
+                    continue
+
+                timecourses = []
+                for k, dose in enumerate(dose_values):
+                    if k == 0:
+                        # first dose
+                        timecourses.append(Timecourse(
+                                start=0,
+                                end=7 * 24 * 60,  # [min]
+                                steps=2000,
+                                changes={
+                                    **self.default_changes(),
+                                    "BW": Q_(self.bodyweights[cohort], "kg"),
+                                    "SCDOSE_tir": Q_(dose, "mg"),
+                                },
+                            )
+                        )
+                    elif k == len(dose_values) - 1:
+                        # last dose
+                        timecourses.append(Timecourse(
+                                start=0,
+                                end=850 * 60,  # [min]
+                                steps=2000,
+                                changes={
+                                    "SCDOSE_tir": Q_(dose, "mg"),
+                                },
+                            )
+                        )
+                    else:
+                        # intermediate dose
+                        timecourses.append(
+                            Timecourse(
+                                start=0,
+                                end=7 * 24 * 60,  # [min]
+                                steps=2000,
+                                changes={
+                                    "SCDOSE_tir": Q_(dose, "mg"),
+                                },
+                            )
+                        )
+                tcsims[f"po_tir_{cohort}_{dose_key}"] = TimecourseSim(
+                    timecourses=timecourses,
+                    time_offset=-7*24*60 * (len(timecourses)-1),
+                )
+
+        return tcsims
+
+    def fit_mappings(self) -> Dict[str, FitMapping]:
+        mappings = {}
+        for kp, cohort in enumerate(self.cohorts):
+            for dose_key in self.doses:
+                if cohort == "cohort1" and dose_key == 15:
+                    continue
+                if cohort == "cohort2" and dose_key == 10:
+                    continue
+                dose_str = str(dose_key).replace(".", "_")
+                mappings[f"fm_po_tir_{cohort}_{dose_key}"] = FitMapping(
+                    self,
+                    reference=FitData(
+                        self,
+                        dataset=f"tirzepatide_{dose_str}_{cohort}",
+                        xid="time",
+                        yid="mean",
+                        yid_sd="mean_sd",
+                        count="count",
+                    ),
+                    observable=FitData(
+                        self, task=f"task_po_tir_{cohort}_{dose_key}", xid="time", yid=f"[Cve_tir]",
+                    ),
+                    metadata=TirzepatideMappingMetaData(
+                        tissue=Tissue.PLASMA,
+                        route=Route.PO,
+                        application_form=ApplicationForm.SUBCUTANEOUS,
+                        dosing=Dosing.MULTIPLE,
+                        health=Health.T2DM,
+                        fasting=Fasting.NR,
+                        coadministration=Coadministration.NONE,
+                    ),
+                )
+
+
+        return mappings
+
+    def figures(self) -> Dict[str, Figure]:
+        fig = Figure(
+            experiment=self,
+            sid="Fig1",
+            num_rows=2,
+            name=f"{self.__class__.__name__}",
+        )
+        plots = fig.create_plots(
+            xaxis=Axis(self.label_time, unit="week", min=-3, max=6), legend=True
+        )
+        plots[0].set_yaxis(self.label_tir, unit=self.unit_tir)
+        plots[1].set_yaxis(self.label_tir, unit=self.unit_tir)
+
+        for kp, cohort in enumerate(self.cohorts):
+            for dose_key in self.doses:
+                if cohort == "cohort1" and dose_key == 15:
+                    continue
+                if cohort == "cohort2" and dose_key == 10:
+                    continue
+                dose_str = str(dose_key).replace(".", "_")
+
+                # simulation
+                plots[kp].add_data(
+                    task=f"task_po_tir_{cohort}_{dose_key}",
+                    xid="time",
+                    yid=f"[Cve_tir]",
+                    label=f"Sim {dose_key} mg tir",
+                    color=self.colors[dose_key],
+                )
+
+                # data
+                plots[kp].add_data(
+                    dataset=f"tirzepatide_{dose_str}_{cohort}",
+                    xid="time",
+                    yid="mean",
+                    yid_sd="mean_sd",
+                    count="count",
+                    label=f"Data {dose_key} mg",
+                    color=self.colors[dose_key],
+                )
+
+        return {
+            fig.sid: fig,
+        }
+
+if __name__ == "__main__":
+    run_experiments(Feng2023, output_dir=Feng2023.__name__)
+</code>
+        </pre>
+            </p>
+
+        </v-content>
+    </v-app>
+</div>
+
+
+<!-- loading dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.6/dist/vuetify.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        delimiters: ['${', '}'],
+        data() {
+            return {}
+        }
+    })
+</script>
+
+
+</body>
+</html>

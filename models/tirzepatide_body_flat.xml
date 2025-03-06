@@ -1522,10 +1522,10 @@ FOR A PARTICULAR PURPOSE.</p></body>
           </rdf:RDF>
         </annotation>
       </species>
-      <species metaid="meta_Cve_alitot" sboTerm="SBO:0000247" id="Cve_alitot" name="total tirzepatide (plasma)" compartment="Vve" initialConcentration="0" substanceUnits="mmole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
+      <species metaid="meta_Cve_tmtot" sboTerm="SBO:0000247" id="Cve_tmtot" name="total tirzepatide (plasma)" compartment="Vve" initialConcentration="0" substanceUnits="mmole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
-            <rdf:Description rdf:about="#meta_Cve_alitot">
+            <rdf:Description rdf:about="#meta_Cve_tmtot">
               <bqbiol:is>
                 <rdf:Bag>
                   <rdf:li rdf:resource="http://identifiers.org/SBO:0000247"/>
@@ -2143,7 +2143,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="meta_Ksc_tir" sboTerm="SBO:0000002" id="Ksc_tir" name="Ksc [1/min] subcutaneous application rate tir" value="0.000209541489290236" units="per_min" constant="true">
+      <parameter metaid="meta_Ksc_tir" sboTerm="SBO:0000002" id="Ksc_tir" name="Ksc [1/min] subcutaneous application rate tir" value="0.000328489053603343" units="per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_Ksc_tir">
@@ -2156,7 +2156,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="meta_TIR2TM_k" sboTerm="SBO:0000153" id="TIR2TM_k" name="tirzepatide cleavage rate" value="0.000770264093993443" units="l_per_min" constant="true">
+      <parameter metaid="meta_TIR2TM_k" sboTerm="SBO:0000153" id="TIR2TM_k" name="tirzepatide cleavage rate" value="0.000678272047043598" units="l_per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_TIR2TM_k">
@@ -2176,7 +2176,6 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
       <parameter id="Qlu" name="lung blood flow" value="NaN" units="l_per_min" constant="false"/>
       <parameter id="Qre" name="rest of body blood flow" value="NaN" units="l_per_min" constant="false"/>
       <parameter id="Qpo" name="portal blood flow" value="NaN" units="l_per_min" constant="false"/>
-      <parameter id="Cve_tmtot" name="Sum of tirzepatide and tirzepatide metabolites" value="NaN" units="mM" constant="false"/>
       <parameter metaid="KI__meta_f_renal_function" sboTerm="SBO:0000009" id="KI__f_renal_function" name="parameter for renal function" value="1" units="dimensionless" constant="true">
         <notes>
           <body xmlns="http://www.w3.org/1999/xhtml">
@@ -2196,7 +2195,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="KI__meta_TMEX_k" sboTerm="SBO:0000009" id="KI__TMEX_k" name="rate urinary excretion of tirzepatide" value="1" units="KI__per_min" constant="true">
+      <parameter metaid="KI__meta_TMEX_k" sboTerm="SBO:0000009" id="KI__TMEX_k" name="rate urinary excretion of tirzepatide" value="0.0191953690449852" units="KI__per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#KI__meta_TMEX_k">
@@ -2209,14 +2208,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter id="LI__vTMIM" units="LI__mmole_per_min" constant="true">
-        <notes>
-          <body xmlns="http://www.w3.org/1999/xhtml">
-            <p>Global parameter for flux assignements.</p>
-          </body>
-        </notes>
-      </parameter>
-      <parameter metaid="LI__meta_TMEX_k" sboTerm="SBO:0000009" id="LI__TMEX_k" name="rate for tirzepatide import, export, transport in bile" value="0.0001" units="LI__per_min" constant="true">
+      <parameter metaid="LI__meta_TMEX_k" sboTerm="SBO:0000009" id="LI__TMEX_k" name="rate for tirzepatide import, export, transport in bile" value="0.00394930762501805" units="LI__per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#LI__meta_TMEX_k">
@@ -2242,7 +2234,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="GU__meta_TMEXC_k" sboTerm="SBO:0000009" id="GU__TMEXC_k" name="rate of tirzepatide metabolite fecal excretion" value="0.1" units="GU__per_min" constant="true">
+      <parameter metaid="GU__meta_TMEXC_k" sboTerm="SBO:0000009" id="GU__TMEXC_k" name="rate of tirzepatide metabolite fecal excretion" value="0.000392062936151394" units="GU__per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#GU__meta_TMEXC_k">
@@ -2256,13 +2248,6 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
         </annotation>
       </parameter>
     </listOfParameters>
-    <listOfInitialAssignments>
-      <initialAssignment symbol="LI__vTMIM">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <ci> LI__TMIM </ci>
-        </math>
-      </initialAssignment>
-    </listOfInitialAssignments>
     <listOfRules>
       <assignmentRule variable="Vgulumen">
         <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -3867,7 +3852,7 @@ injection rate.</p>
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> LI__vTMIM </ci>
+            <ci> LI__TMIM </ci>
           </math>
         </kineticLaw>
       </reaction>
@@ -3891,7 +3876,7 @@ injection rate.</p>
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> LI__vTMIM </ci>
+            <ci> LI__TMIM </ci>
           </math>
         </kineticLaw>
       </reaction>

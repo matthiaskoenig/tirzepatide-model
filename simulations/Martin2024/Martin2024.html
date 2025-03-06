@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <title>Martin2024</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <!--<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/default.min.css">
+</head>
+
+<body>
+<div id="app">
+    <!-- Vue app-->
+    <v-app>
+        <v-content>
+
+            <a href="../index.html">Experiments</a>
+            <h1>Martin2024</h1>
+
+            <h2>Models</h2>
+            <p>
+            <ul>
+                <li><strong>model</strong>: <a href="../../../models/results/models/tirzepatide_body_flat.xml">../../../models/results/models/tirzepatide_body_flat.xml</a></li>
+            </ul>
+            </p>
+
+            <h2>Datasets</h2>
+            <p>
+            <ul>
+                <li><strong>tir_and_tm_plasma_TIRC14</strong>: <a href="Martin2024_tir_and_tm_plasma_TIRC14.tsv">Martin2024_tir_and_tm_plasma_TIRC14.tsv</a></li>
+                <li><strong>tirzepatide_blood_TIR</strong>: <a href="Martin2024_tirzepatide_blood_TIR.tsv">Martin2024_tirzepatide_blood_TIR.tsv</a></li>
+                <li><strong>tirzepatide_plasma_TIR</strong>: <a href="Martin2024_tirzepatide_plasma_TIR.tsv">Martin2024_tirzepatide_plasma_TIR.tsv</a></li>
+                <li><strong>recovery_feces_TIRC14</strong>: <a href="Martin2024_recovery_feces_TIRC14.tsv">Martin2024_recovery_feces_TIRC14.tsv</a></li>
+                <li><strong>recovery_urine_TIRC14</strong>: <a href="Martin2024_recovery_urine_TIRC14.tsv">Martin2024_recovery_urine_TIRC14.tsv</a></li>
+                <li><strong>tm_feces_TIRC14</strong>: <a href="Martin2024_tm_feces_TIRC14.tsv">Martin2024_tm_feces_TIRC14.tsv</a></li>
+                <li><strong>tm_urine_TIRC14</strong>: <a href="Martin2024_tm_urine_TIRC14.tsv">Martin2024_tm_urine_TIRC14.tsv</a></li>
+            </ul>
+            </p>
+
+            <h2>Figures</h2>
+            <p>
+            <ul>
+                <li><strong>Fig3_Fig4</strong>: <a href="Martin2024_Fig3_Fig4.svg">Martin2024_Fig3_Fig4.svg</a></li>
+            </ul>
+            </p>
+
+            <h3>Fig3_Fig4</h3>
+            <p>
+            <table>
+                <tr>
+                    <td>
+                        <!--<v-img src="Martin2024_Fig3_Fig4.svg" max-width="600" width="600"></v-img>-->
+                        <img src="Martin2024_Fig3_Fig4.svg" width="600">
+                    </td>
+                    <!--
+                    <td>
+                    </td>
+                    -->
+                </tr>
+            </table>
+            </p>
+
+            <h2>Code</h2>
+            <p>
+                <a href="../../../experiments/studies/martin2024.py">../../../experiments/studies/martin2024.py</a>
+            <pre>
+<code class="python">from typing import Dict
+
+from sbmlsim.data import DataSet, load_pkdb_dataframe
+from sbmlsim.fit import FitMapping, FitData
+from sbmlutils.console import console
+
+from pkdb_models.models.tirzepatide.experiments.base_experiment import (
+    TirzepatideSimulationExperiment,
+)
+from pkdb_models.models.tirzepatide.experiments.metadata import Tissue, Route, Dosing, ApplicationForm, Health, \
+    Fasting, TirzepatideMappingMetaData, Coadministration
+
+from sbmlsim.plot import Axis, Figure
+from sbmlsim.simulation import Timecourse, TimecourseSim
+
+from pkdb_models.models.tirzepatide.helpers import run_experiments
+
+
+class Martin2024(TirzepatideSimulationExperiment):
+    """Simulation experiment of Martin2024."""
+    colors = {
+        "plasma": "black",
+        "urine": "tab:orange",
+        "feces": "tab:brown",
+    }
+    tissues = list(colors.keys())
+    doses = {
+        # "TIR": 4.1,  # mg
+        "TIRC14": 2.9,  # mg
+    }
+    sinfo = {
+        "[Cve_tmtot]": "tir_and_tm_plasma",
+        "Aurine_tm": "tm_urine",
+        "Afeces_tm": "tm_feces",
+    }
+
+    def datasets(self) -> Dict[str, DataSet]:
+        dsets = {}
+        for fig_id in ["Fig3", "Fig4"]:
+            df = load_pkdb_dataframe(f"{self.sid}_{fig_id}", data_path=self.data_path)
+            for label, df_label in df.groupby("label"):
+                dset = DataSet.from_df(df_label, self.ureg)
+                if label.startswith("tir"):
+                    dset.unit_conversion("mean", 1 / self.Mr.tir)
+                if label.startswith("tm"):
+                    dset.unit_conversion("mean", 1 / self.Mr.tm)
+                dsets[f"{label}"] = dset
+
+        # console.print(dsets.keys())
+        return dsets
+
+    def simulations(self) -> Dict[str, TimecourseSim]:
+        Q_ = self.Q_
+        tcsims = {}
+        for dose_key, dose in self.doses.items():
+            tcsims[f"sc_{dose_key}"] = TimecourseSim(
+                [Timecourse(
+                    start=0,
+                    end=864 * 60,  # [min]
+                    steps=2000,
+                    changes={
+                        **self.default_changes(),
+                        "SCDOSE_tir": Q_(dose, "mg"),
+                    },
+                )]
+            )
+        return tcsims
+
+    def fit_mappings(self) -> Dict[str, FitMapping]:
+        mappings = {}
+        for k, sid in enumerate(self.sinfo):
+            name = self.sinfo[sid]
+            tissue_key = self.tissues[k]
+            if tissue_key == "plasma":
+                tissue = Tissue.PLASMA
+            elif tissue_key == "urine":
+                tissue = Tissue.URINE
+            elif tissue_key == "feces":
+                tissue = Tissue.FECES
+
+            mappings[f"fm_sc_TIRC14_{name}"] = FitMapping(
+                self,
+                reference=FitData(
+                    self,
+                    dataset=f"{name}_TIRC14",
+                    xid="time",
+                    yid="mean",
+                    yid_sd="mean_sd",
+                    count="count",
+                ),
+                observable=FitData(
+                    self, task=f"task_sc_TIRC14", xid="time", yid=sid,
+                ),
+                metadata=TirzepatideMappingMetaData(
+                    tissue=tissue,
+                    route=Route.SC,
+                    application_form=ApplicationForm.SUBCUTANEOUS,
+                    dosing=Dosing.SINGLE,
+                    health=Health.HEALTHY,
+                    fasting=Fasting.FASTED,
+                    coadministration=Coadministration.NONE,
+                ),
+            )
+        return mappings
+
+    def figures(self) -> Dict[str, Figure]:
+        fig = Figure(
+            experiment=self,
+            sid="Fig3_Fig4",
+            num_rows=3,
+            name=f"{self.__class__.__name__}",
+        )
+        plots = fig.create_plots(
+            xaxis=Axis(self.label_time, unit=self.unit_time), legend=True
+        )
+        plots[0].set_yaxis(self.label_tir, unit=self.unit_tir)
+        plots[1].set_yaxis(self.label_tm_urine, unit=self.unit_tm_urine)
+        plots[2].set_yaxis(self.label_tm_feces, unit=self.unit_tm_feces)
+
+        for k, sid in enumerate(self.sinfo):
+            name = self.sinfo[sid]
+            tissue = self.tissues[k]
+            # simulation
+            plots[k].add_data(
+                task=f"task_sc_TIRC14",
+                xid="time",
+                yid=sid,
+                label=f"Sim",
+                color=self.colors[tissue],
+            )
+            # data
+            plots[k].add_data(
+                dataset=f"{name}_TIRC14",
+                xid="time",
+                yid="mean",
+                yid_sd="mean_sd",
+                count="count",
+                label=f"Data TIRC14 (2.9 mg)",
+                color=self.colors[tissue],
+            )
+        return {
+            fig.sid: fig,
+        }
+
+if __name__ == "__main__":
+    run_experiments(Martin2024, output_dir=Martin2024.__name__)
+</code>
+        </pre>
+            </p>
+
+        </v-content>
+    </v-app>
+</div>
+
+
+<!-- loading dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.6/dist/vuetify.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+    const app = new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        delimiters: ['${', '}'],
+        data() {
+            return {}
+        }
+    })
+</script>
+
+
+</body>
+</html>

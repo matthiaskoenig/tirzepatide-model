@@ -295,14 +295,7 @@ FOR A PARTICULAR PURPOSE.</p></body>
       </species>
     </listOfSpecies>
     <listOfParameters>
-      <parameter id="vTMIM" units="mmole_per_min" constant="true">
-        <notes>
-          <body xmlns="http://www.w3.org/1999/xhtml">
-            <p>Global parameter for flux assignements.</p>
-          </body>
-        </notes>
-      </parameter>
-      <parameter metaid="meta_TMEX_k" sboTerm="SBO:0000009" id="TMEX_k" name="rate for tirzepatide import, export, transport in bile" value="0.0001" units="per_min" constant="true">
+      <parameter metaid="meta_TMEX_k" sboTerm="SBO:0000009" id="TMEX_k" name="rate for tirzepatide import, export, transport in bile" value="0.00394930762501805" units="per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_TMEX_k">
@@ -316,13 +309,6 @@ FOR A PARTICULAR PURPOSE.</p></body>
         </annotation>
       </parameter>
     </listOfParameters>
-    <listOfInitialAssignments>
-      <initialAssignment symbol="vTMIM">
-        <math xmlns="http://www.w3.org/1998/Math/MathML">
-          <ci> TMIM </ci>
-        </math>
-      </initialAssignment>
-    </listOfInitialAssignments>
     <listOfReactions>
       <reaction metaid="meta_TMIM" sboTerm="SBO:0000655" id="TMIM" name="tirzepatide import (TMIM)" reversible="false" compartment="Vmem">
         <annotation>
@@ -373,7 +359,7 @@ FOR A PARTICULAR PURPOSE.</p></body>
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> vTMIM </ci>
+            <ci> TMIM </ci>
           </math>
         </kineticLaw>
       </reaction>
@@ -397,7 +383,7 @@ FOR A PARTICULAR PURPOSE.</p></body>
         </listOfProducts>
         <kineticLaw>
           <math xmlns="http://www.w3.org/1998/Math/MathML">
-            <ci> vTMIM </ci>
+            <ci> TMIM </ci>
           </math>
         </kineticLaw>
       </reaction>

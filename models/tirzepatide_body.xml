@@ -1136,10 +1136,10 @@ FOR A PARTICULAR PURPOSE.</p></body>
           <comp:replacedElement metaid="Clumen_tm_RE2" comp:portRef="tm_lumen_port" comp:submodelRef="LI"/>
         </comp:listOfReplacedElements>
       </species>
-      <species metaid="meta_Cve_alitot" sboTerm="SBO:0000247" id="Cve_alitot" name="total tirzepatide (plasma)" compartment="Vve" initialConcentration="0" substanceUnits="mmole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
+      <species metaid="meta_Cve_tmtot" sboTerm="SBO:0000247" id="Cve_tmtot" name="total tirzepatide (plasma)" compartment="Vve" initialConcentration="0" substanceUnits="mmole" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
-            <rdf:Description rdf:about="#meta_Cve_alitot">
+            <rdf:Description rdf:about="#meta_Cve_tmtot">
               <bqbiol:is>
                 <rdf:Bag>
                   <rdf:li rdf:resource="http://identifiers.org/SBO:0000247"/>
@@ -1661,7 +1661,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="meta_Ksc_tir" sboTerm="SBO:0000002" id="Ksc_tir" name="Ksc [1/min] subcutaneous application rate tir" value="0.000209541489290236" units="per_min" constant="true">
+      <parameter metaid="meta_Ksc_tir" sboTerm="SBO:0000002" id="Ksc_tir" name="Ksc [1/min] subcutaneous application rate tir" value="0.000328489053603343" units="per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_Ksc_tir">
@@ -1674,7 +1674,7 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
           </rdf:RDF>
         </annotation>
       </parameter>
-      <parameter metaid="meta_TIR2TM_k" sboTerm="SBO:0000153" id="TIR2TM_k" name="tirzepatide cleavage rate" value="0.000770264093993443" units="l_per_min" constant="true">
+      <parameter metaid="meta_TIR2TM_k" sboTerm="SBO:0000153" id="TIR2TM_k" name="tirzepatide cleavage rate" value="0.000678272047043598" units="l_per_min" constant="true">
         <annotation>
           <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:vCard4="http://www.w3.org/2006/vcard/ns#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
             <rdf:Description rdf:about="#meta_TIR2TM_k">
@@ -1694,7 +1694,6 @@ with FQgu=0.146, FQsp=0.017, FQpa=0.017</p>
       <parameter id="Qlu" name="lung blood flow" value="NaN" units="l_per_min" constant="false"/>
       <parameter id="Qre" name="rest of body blood flow" value="NaN" units="l_per_min" constant="false"/>
       <parameter id="Qpo" name="portal blood flow" value="NaN" units="l_per_min" constant="false"/>
-      <parameter id="Cve_tmtot" name="Sum of tirzepatide and tirzepatide metabolites" value="NaN" units="mM" constant="false"/>
     </listOfParameters>
     <listOfRules>
       <assignmentRule variable="Vgulumen">
